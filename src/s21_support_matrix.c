@@ -47,7 +47,7 @@ int s21_square_matrix(matrix_t *A)
 void s21_new_matrix_for_minor(int rows, int columns, int crossed_out_rows, int crossed_out_column, matrix_t *minor, matrix_t *A)
 {
     s21_create_matrix(rows - 1, columns - 1, minor);
-    
+    minor -> rows = rows - 1;
     int minor_index_i = 0;
     int minor_index_j = 0;
 
@@ -64,6 +64,34 @@ void s21_new_matrix_for_minor(int rows, int columns, int crossed_out_rows, int c
     }
 }
 
+double s21_determinant_execution(matrix_t *A)
+{
+    int minor_size = A -> rows;
+    int alg_add = 1;
+    double result = 0.0f;
+    if(A -> rows == 1)
+    {
+        result = A -> matrix[0][0];
+    }
+    else if (A -> rows == 2)
+    {
+        result = (A -> matrix[0][0] * A -> matrix[1][1]) - (A -> matrix[1][0] * A -> matrix[0][1]);
+    }
+    else if(A -> rows > 2)
+    {
+        for(int i = 0; i < A -> rows; i++)
+        {
+            matrix_t minor = {0};
+
+            s21_new_matrix_for_minor(minor_size, minor_size, 0, i, &minor, A);
+
+            result += alg_add * A -> matrix[0][i] * s21_determinant_execution(&minor);
+            s21_remove_matrix(&minor);
+            alg_add = -alg_add;
+        }
+    }
+    return result;
+}
 
 void s21_set_null_matrix(matrix_t* result) 
 {

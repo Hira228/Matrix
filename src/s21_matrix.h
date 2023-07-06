@@ -34,4 +34,5 @@ int s21_square_matrix(matrix_t *A);
 int s21_determinant(matrix_t *A, double *result);
 int s21_inverse_matrix(matrix_t *A, matrix_t *result);
 void s21_set_null_matrix(matrix_t* result);
+double s21_determinant_execution(matrix_t *A);
 #endif

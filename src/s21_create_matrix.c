@@ -28,19 +28,19 @@
             printf("\n");
         }
 
-        matrix_t minor = {0};
-        s21_new_matrix_for_minor(3, 3, 0, 0, &minor, &result);
-        printf("\n");
-        for(int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 2; j++)
-            {
-                printf("%lf\t", minor.matrix[i][j]);
-            }
-            printf("\n");
-        }
+        // matrix_t minor = {0};
+        // s21_new_matrix_for_minor(3, 3, 0, 2, &minor, &result);
+        // printf("\n");
+        // for(int i = 0; i < 2; i++)
+        // {
+        //     for (int j = 0; j < 2; j++)
+        //     {
+        //         printf("%lf\t", minor.matrix[i][j]);
+        //     }
+        //     printf("\n");
+        // }
         s21_determinant(&result, &res);
-       printf("%f\n", res);
+        printf("%f\n", res);
     }
 
 
@@ -257,41 +257,11 @@
 
     int s21_determinant(matrix_t *A, double *result)
     {
-        int flag_fail = SUCCESS;
-        int minor_size = A -> rows;
-        int alg_add = 1;
-
-        // if (!s21_check_matrix(A) || !s21_square_matrix(A))
-        // {
-        //     flag_fail = FAILURE;
-        // }
-        // else
-        {
-            if(A -> rows == 1)
-            {
-                *result = A -> matrix[0][0];
-            }
-            else if (A -> rows == 2)
-            {
-                *result = (A -> matrix[0][0] * A -> matrix[1][1]) - (A -> matrix[1][0] * A -> matrix[0][1]);
-            }
-            else if(A -> rows > 2)
-            {
-                for(int i = 0; i < A -> rows; i++)
-                {
-                    matrix_t minor = {0};
-
-                    s21_new_matrix_for_minor(minor_size, minor_size, 0, i, &minor, A);
-
-                    *result += alg_add * minor.matrix[0][i] * s21_determinant(&minor, result);
-                    s21_remove_matrix(&minor);
-                    alg_add = -alg_add;
-                }
-            }
-        }
-
-        return flag_fail;
+        int return_value = 1;
+        *result = s21_determinant_execution(A);
+        return return_value;
     }
+
 
     int s21_inverse_matrix(matrix_t *A, matrix_t *result)
     {
