@@ -6,21 +6,41 @@
         matrix_t result = {NULL, 3, 3};
         int rows = 1;
         int columns = 1;
-        int count = 1;
-        double res = 0.0;
+        double count = 1;
+        double res;
+        double count_w = 2;
         s21_create_matrix(3, 3, &result);
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                result.matrix[i][j] = count++; 
+                result.matrix[i][j] = rand() % 10; 
+                count += 0.2;
             }
+            count -=5;
+        }  
+        for(int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                printf("%lf\t", result.matrix[i][j]);
+            }
+            printf("\n");
         }
 
-
-
+        matrix_t minor = {0};
+        s21_new_matrix_for_minor(3, 3, 0, 0, &minor, &result);
+        printf("\n");
+        for(int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                printf("%lf\t", minor.matrix[i][j]);
+            }
+            printf("\n");
+        }
         s21_determinant(&result, &res);
-        printf("%f", res);
+       printf("%f\n", res);
     }
 
 
@@ -241,11 +261,11 @@
         int minor_size = A -> rows;
         int alg_add = 1;
 
-        if (!s21_check_matrix(A) || !s21_square_matrix(A))
-        {
-            flag_fail = FAILURE;
-        }
-        else
+        // if (!s21_check_matrix(A) || !s21_square_matrix(A))
+        // {
+        //     flag_fail = FAILURE;
+        // }
+        // else
         {
             if(A -> rows == 1)
             {
