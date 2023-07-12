@@ -29,7 +29,7 @@ int s21_calc_complements(matrix_t *A, matrix_t *result);
 int s21_check_matrix(matrix_t *A);
 int s21_size_comparison(matrix_t *A, matrix_t *B);
 int s21_compare_digits(double a, double b);
-void s21_new_matrix_for_minor(int rows, int columns, int crossed_out_rows, int crossed_out_column, matrix_t *minor, matrix_t *A);
+void s21_new_matrix_for_minor(matrix_t *A, matrix_t *minor, int minor_size, int crossed_out_rows, int crossed_out_column);
 int s21_square_matrix(matrix_t *A);
 int s21_determinant(matrix_t *A, double *result);
 int s21_inverse_matrix(matrix_t *A, matrix_t *result);

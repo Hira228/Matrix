@@ -3,49 +3,66 @@
 
     int main()
     {
-        matrix_t result = {NULL, 3, 3};
+        matrix_t result = {NULL, 4, 4};
         int rows = 1;
         int columns = 1;
         double count = 1;
-        double res;
+        double res = 0.f;
         double count_w = 2;
-        s21_create_matrix(3, 3, &result);
-        for (int i = 0; i < 3; i++)
+        s21_create_matrix(4, 4, &result);
+        result.matrix[0][0] = 1.f;
+        result.matrix[0][1] = 5.f;
+        result.matrix[0][2] = 1.f;
+        result.matrix[0][3] = 3.f;
+        result.matrix[1][0] = 2.f;
+        result.matrix[1][1] = 6.f;
+        result.matrix[1][2] = 1.f;
+        result.matrix[1][3] = 2.f;
+        result.matrix[2][0] = 9.f;
+        result.matrix[2][1] = 1.f;
+        result.matrix[2][2] = 4.f;
+        result.matrix[2][3] = 5.f;
+        result.matrix[3][0] = 1.f;
+        result.matrix[3][1] = 3.f;
+        result.matrix[3][2] = 7.f;
+        result.matrix[3][3] = 8.f;
+
+        // for (int i = 0; i < 4; i++)
+        // {
+        //     for (int j = 0; j < 4; j++)
+        //     {
+        //         result.matrix[i][j] =rand () % 5; 
+        //     }
+        // }  
+        for(int i = 0; i < 4; i++)
         {
-            for (int j = 0; j < 3; j++)
-            {
-                result.matrix[i][j] = rand() % 10; 
-                count += 0.2;
-            }
-            count -=5;
-        }  
-        for(int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 4; j++)
             {
                 printf("%lf\t", result.matrix[i][j]);
             }
             printf("\n");
         }
 
-        // matrix_t minor = {0};
-        // s21_new_matrix_for_minor(3, 3, 0, 2, &minor, &result);
+        matrix_t minor = {0};
+        // s21_new_matrix_for_minor(&result, &minor, 3, 0, 0);
         // printf("\n");
-        // for(int i = 0; i < 2; i++)
+        // for(int i = 0; i < 3; i++)
         // {
-        //     for (int j = 0; j < 2; j++)
+        //     for (int j = 0; j < 3; j++)
         //     {
         //         printf("%lf\t", minor.matrix[i][j]);
         //     }
         //     printf("\n");
         // }
         s21_determinant(&result, &res);
-        printf("%f\n", res);
+        printf("\n%lf\n", res);
     }
 
 
     int s21_create_matrix(int rows, int columns, matrix_t *result)
     {
+        result -> rows = rows;
+        result -> columns = columns;
 
         result -> matrix = (double **)malloc(rows * sizeof(double *));
 
@@ -236,7 +253,7 @@
                 {
                     double alg_add = 1.0f;
 
-                    s21_new_matrix_for_minor(A -> rows, i, j, A -> columns, &minor, A);
+                    s21_new_matrix_for_minor(A, &minor, A -> rows - 1, i, j);
                     if((i + j) % 2 == 1)
                     {
                         alg_add = -1.0f;
