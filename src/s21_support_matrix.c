@@ -1,20 +1,29 @@
 #include "s21_matrix.h"
 
-int s21_check_matrix(matrix_t *A)
+int s21_check_null_matrix(matrix_t *A)
 {
-    int flag_fail = SUCCESS;
+    int flag_fail = 0;
     
-    if(A -> matrix == NULL)
+    if(A -> matrix == NULL || A == NULL)
     {
-        flag_fail = FAILURE;
-    }
-    if(A -> rows <= 0 || A -> columns <= 0)
-    {  
-        flag_fail = FAILURE;
+        flag_fail = 1;
     }
     
     return flag_fail;
 }
+
+int s21_incorrect_matrix(matrix_t *A)
+{
+    int flag_fail = 0;
+
+    if(!s21_check_null_matrix(A))
+    {
+        if(A -> rows <= 0 || A -> columns <= 0) flag_fail = 1;
+    }
+    else    flag_fail = 1;
+
+    return flag_fail;
+} 
 
 int s21_size_comparison(matrix_t *A, matrix_t *B)
 {
@@ -23,17 +32,17 @@ int s21_size_comparison(matrix_t *A, matrix_t *B)
 
 int s21_compare_digits(double a, double b)
 {
-    int flag_fail = SUCCESS;
+    int flag_fail = 0;
     
     char digit_a[100] = {0};
     char digit_b[100] = {0};
     
-    sprintf(digit_a, "%.6f");
-    sprintf(digit_b, "%.6f");
+    sprintf(digit_a, "%.6f", a);
+    sprintf(digit_b, "%.6f", b);
     
-    if(strcmp(digit_a, digit_b))
+    if(strcmp(digit_a, digit_b) == 0)
     {
-       flag_fail = FAILURE; 
+       flag_fail = 1;
     }
 
     return flag_fail;
