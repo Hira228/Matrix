@@ -4,9 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "test_matriX/s21_test_matrix.h"
 
 #define SUCCESS 1
 #define FAILURE 0
+
+enum {OK = 0, INCORRECT_MATRIX = 1, CALC_ERROR = 2, MALLOC_FAILED = 3};
 
 typedef struct matrix_struct
 {

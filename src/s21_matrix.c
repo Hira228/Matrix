@@ -1,67 +1,65 @@
-    #include "s21_matrix.h"
-    #include "s21_support_matrix.c"
+#include "s21_matrix.h"
 
-// 0 - ОК
-// 1 - Ошибка, неправильная матрица
-// 2 - Ошибка расчета (несоответствие размеров матриц; матрица, для которой
-//     невозможно произвести расчеты и т.д.)
+// 0 - OK
+// 1 - Error, incorrect matrix
+// 2 - Calculation error (mismatched matrix sizes; matrix for which calculations cannot be performed, etc.)
 
 //  EQ MATRIX 
 //  SUCCESS 1
 //  FAILURE 0
 
-int main()
-{
-        matrix_t result = {NULL, 4, 4};
-        double res = 0.f;
-        s21_create_matrix(4, 4, &result);
-        result.matrix[0][0] = 1.f;
-        result.matrix[0][1] = 5.f;
-        result.matrix[0][2] = 1.f;
-        result.matrix[0][3] = 3.f;
-        result.matrix[1][0] = 2.f;
-        result.matrix[1][1] = 6.f;
-        result.matrix[1][2] = 1.f;
-        result.matrix[1][3] = 2.f;
-        result.matrix[2][0] = 9.f;
-        result.matrix[2][1] = 1.f;
-        result.matrix[2][2] = 4.f;
-        result.matrix[2][3] = 5.f;
-        result.matrix[3][0] = 1.f;
-        result.matrix[3][1] = 3.f;
-        result.matrix[3][2] = 7.f;
-        result.matrix[3][3] = 8.f;
+// int main()
+// {
+//         matrix_t result = {NULL, 4, 4};
+//         double res = 0.f;
+//         s21_create_matrix(4, 4, &result);
+//         result.matrix[0][0] = 1.f;
+//         result.matrix[0][1] = 5.f;
+//         result.matrix[0][2] = 1.f;
+//         result.matrix[0][3] = 3.f;
+//         result.matrix[1][0] = 2.f;
+//         result.matrix[1][1] = 6.f;
+//         result.matrix[1][2] = 1.f;
+//         result.matrix[1][3] = 2.f;
+//         result.matrix[2][0] = 9.f;
+//         result.matrix[2][1] = 1.f;
+//         result.matrix[2][2] = 4.f;
+//         result.matrix[2][3] = 5.f;
+//         result.matrix[3][0] = 1.f;
+//         result.matrix[3][1] = 3.f;
+//         result.matrix[3][2] = 7.f;
+//         result.matrix[3][3] = 8.f;
 
-        // for (int i = 0; i < 4; i++)
-        // {
-        //     for (int j = 0; j < 4; j++)
-        //     {
-        //         result.matrix[i][j] =rand () % 5; 
-        //     }
-        // }  
-        for(int i = 0; i < 4; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                printf("%lf\t", result.matrix[i][j]);
-            }
-            printf("\n");
-        }
+//         // for (int i = 0; i < 4; i++)
+//         // {
+//         //     for (int j = 0; j < 4; j++)
+//         //     {
+//         //         result.matrix[i][j] =rand () % 5; 
+//         //     }
+//         // }  
+//         for(int i = 0; i < 4; i++)
+//         {
+//             for (int j = 0; j < 4; j++)
+//             {
+//                 printf("%lf\t", result.matrix[i][j]);
+//             }
+//             printf("\n");
+//         }
 
-        matrix_t minor = {0};
-        s21_new_matrix_for_minor(&result, &minor, 3, 0, 0);
-        printf("\n");
-        for(int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                printf("%lf\t", minor.matrix[i][j]);
-            }
-            printf("\n");
-        }
-        s21_determinant(&result, &res);
-        printf("\n%lf\n", res);
-}
+//         matrix_t minor = {0};
+//         s21_new_matrix_for_minor(&result, &minor, 3, 0, 0);
+//         printf("\n");
+//         for(int i = 0; i < 3; i++)
+//         {
+//             for (int j = 0; j < 3; j++)
+//             {
+//                 printf("%lf\t", minor.matrix[i][j]);
+//             }
+//             printf("\n");
+//         }
+//         s21_determinant(&result, &res);
+//         printf("\n%lf\n", res);
+// }
 
 
 int s21_create_matrix(int rows, int columns, matrix_t *result)
@@ -201,7 +199,7 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result)
         {
             for (int j = 0; j < A -> columns; j++)
             {
-                result -> matrix[i][j] = A -> matrix[i][j] * number;      // ?? насчет проверки на 0
+                result -> matrix[i][j] = A -> matrix[i][j] * number;      // 0
             }
         }
     }
@@ -287,7 +285,7 @@ int s21_calc_complements(matrix_t *A, matrix_t *result)
                     
                     s21_determinant(&minor, &result_determinant);     
 
-                    result -> matrix[i][j] = alg_add * result_determinant;              /// ?? ПРОВЕРРИТТЬ 
+                    result -> matrix[i][j] = alg_add * result_determinant;              /// ? 0
 
                     s21_remove_matrix(&minor);
                 }
@@ -319,9 +317,9 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result)
     int flag_fail = 0;
     double determinant = 0;
         
-    if(s21_check_null_matrix(A) || !s21_check_matrix(A))                                flag_fail = 1;
+    if(s21_check_null_matrix(A) || !s21_incorrect_matrix(A))                                flag_fail = 1;
         
-    else if(!s21_square_matrix(A) || (A -> rows == 1 && A -> matrix[0][0] == 0.0f))     flag_fail = 2;
+    else if(!s21_square_matrix(A) || (A -> rows == 1 && A -> matrix[0][0] == 0.0f))         flag_fail = 2;
         
     else
     {
