@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "test_matriX/s21_test_matrix.h"
 
 #define SUCCESS 1
 #define FAILURE 0

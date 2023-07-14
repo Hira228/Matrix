@@ -4,7 +4,7 @@ int s21_check_null_matrix(matrix_t *A)
 {
     int flag_fail = 0;
     
-    if(A -> matrix == NULL || A == NULL)
+    if(A -> matrix == NULL || !A)
     {
         flag_fail = 1;
     }
@@ -34,8 +34,8 @@ int s21_compare_digits(double a, double b)
 {
     int flag_fail = 0;
     
-    char digit_a[100] = {0};
-    char digit_b[100] = {0};
+    char digit_a[1000] = {0};
+    char digit_b[1000] = {0};
     
     sprintf(digit_a, "%.6f", a);
     sprintf(digit_b, "%.6f", b);
@@ -58,7 +58,7 @@ void s21_new_matrix_for_minor(matrix_t *A, matrix_t *minor, int minor_size, int 
     s21_create_matrix(minor_size, minor_size, minor);
     int minor_index_i = 0;
     int minor_index_j = 0;
-//printf("%d\n", columns);
+
     for (int i = 0; i < A -> rows; i++)
     {
         for (int j = 0; j < A -> columns; j++)
@@ -94,8 +94,8 @@ double s21_determinant_execution(matrix_t *A)
             s21_new_matrix_for_minor(A, &minor, minor_size - 1, 0, i);
 
             result += alg_add * A -> matrix[0][i] * s21_determinant_execution(&minor);
-            //printf("%lf\n", s21_determinant_execution(&minor));
             s21_remove_matrix(&minor);
+
             alg_add = -alg_add;
         }
     }

@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "../s21_matrix.h"
+
 Suite *suite_matrix_gather(void);
 Suite *suite_create_matrix(void);
 Suite *suite_transpose_matrix(void);

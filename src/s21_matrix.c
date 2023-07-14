@@ -8,65 +8,12 @@
 //  SUCCESS 1
 //  FAILURE 0
 
-// int main()
-// {
-//         matrix_t result = {NULL, 4, 4};
-//         double res = 0.f;
-//         s21_create_matrix(4, 4, &result);
-//         result.matrix[0][0] = 1.f;
-//         result.matrix[0][1] = 5.f;
-//         result.matrix[0][2] = 1.f;
-//         result.matrix[0][3] = 3.f;
-//         result.matrix[1][0] = 2.f;
-//         result.matrix[1][1] = 6.f;
-//         result.matrix[1][2] = 1.f;
-//         result.matrix[1][3] = 2.f;
-//         result.matrix[2][0] = 9.f;
-//         result.matrix[2][1] = 1.f;
-//         result.matrix[2][2] = 4.f;
-//         result.matrix[2][3] = 5.f;
-//         result.matrix[3][0] = 1.f;
-//         result.matrix[3][1] = 3.f;
-//         result.matrix[3][2] = 7.f;
-//         result.matrix[3][3] = 8.f;
-
-//         // for (int i = 0; i < 4; i++)
-//         // {
-//         //     for (int j = 0; j < 4; j++)
-//         //     {
-//         //         result.matrix[i][j] =rand () % 5; 
-//         //     }
-//         // }  
-//         for(int i = 0; i < 4; i++)
-//         {
-//             for (int j = 0; j < 4; j++)
-//             {
-//                 printf("%lf\t", result.matrix[i][j]);
-//             }
-//             printf("\n");
-//         }
-
-//         matrix_t minor = {0};
-//         s21_new_matrix_for_minor(&result, &minor, 3, 0, 0);
-//         printf("\n");
-//         for(int i = 0; i < 3; i++)
-//         {
-//             for (int j = 0; j < 3; j++)
-//             {
-//                 printf("%lf\t", minor.matrix[i][j]);
-//             }
-//             printf("\n");
-//         }
-//         s21_determinant(&result, &res);
-//         printf("\n%lf\n", res);
-// }
-
 
 int s21_create_matrix(int rows, int columns, matrix_t *result)
 {
     int flag_fail = 0;
 
-    if(rows <= 0 && columns <= 0)
+    if(rows <= 0 || columns <= 0)
     {
        flag_fail = 1;
     }
@@ -79,7 +26,7 @@ int s21_create_matrix(int rows, int columns, matrix_t *result)
 
         for (int i = 0; i < rows; i++)
         {
-            result -> matrix[i] = (double *) malloc (columns * sizeof(double));
+            result -> matrix[i] = (double *)malloc (columns * sizeof(double));
         }
 
         s21_set_null_matrix(result);
@@ -113,7 +60,7 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B)
     {
         flag_fail = FAILURE;
     }
-    else if(s21_size_comparison(A, B) || s21_check_null_matrix(A) || s21_check_null_matrix(B))
+    else if(!s21_size_comparison(A, B) || s21_check_null_matrix(A) || s21_check_null_matrix(B))
     {
         flag_fail = FAILURE;
     }
@@ -215,7 +162,7 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result)
         
     else if(s21_incorrect_matrix(A) || s21_incorrect_matrix(B))   flag_fail = 1;
         
-    else if(A -> columns != B -> columns)                         flag_fail = 2;
+    else if(A -> columns != B -> rows)                            flag_fail = 2;
         
     else
     {
@@ -224,7 +171,6 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result)
         {
             for (int j = 0; j < B -> columns; j++)
             {
-                result -> matrix[i][j] = 0;
                 for (int k = 0; k < A -> columns; k++)
                 {
                     result -> matrix[i][j] += A -> matrix[i][k] * B -> matrix[k][j];
@@ -300,7 +246,7 @@ int s21_determinant(matrix_t *A, double *result)
 {
         int flag_fail = 1;
         
-        if(s21_check_null_matrix(A) || s21_incorrect_matrix(A))  flag_fail = 1;
+        if(s21_check_null_matrix(A) || s21_incorrect_matrix(A) || !result)  flag_fail = 1;
         
         else if (!s21_square_matrix(A))                          flag_fail = 2;
         
@@ -315,15 +261,18 @@ int s21_determinant(matrix_t *A, double *result)
 int s21_inverse_matrix(matrix_t *A, matrix_t *result)
 {
     int flag_fail = 0;
-    double determinant = 0;
         
     if(s21_check_null_matrix(A) || !s21_incorrect_matrix(A))                                flag_fail = 1;
         
     else if(!s21_square_matrix(A) || (A -> rows == 1 && A -> matrix[0][0] == 0.0f))         flag_fail = 2;
-        
+    
+    // else if(A -> rows == 1 && A -> matrix[0][0] != 0.0f)
+    // {
+    //     result -> matrix[0][0] = (1.0 / A -> matrix[0][0]);
+    // }
     else
     {
-        s21_determinant(A, &determinant);
+        double determinant = s21_determinant_execution(A);
 
         if(determinant == 0.0f)
         {
@@ -340,13 +289,8 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result)
             s21_create_matrix(A -> rows, A -> rows, &alg_matrix_transpose);
             s21_transpose(&alg_matrix, &alg_matrix_transpose);
 
-            for (int i = 0; i < A -> rows; i++)
-            {
-                for (int j = 0; j < A -> rows; j++)
-                {
-                        result -> matrix[i][j] = alg_matrix_transpose.matrix[i][j];
-                }
-            }
+            s21_mult_number(&alg_matrix_transpose, 1.0f / determinant, result);
+
             s21_remove_matrix(&alg_matrix);
             s21_remove_matrix(&alg_matrix_transpose);
         }
