@@ -70,7 +70,7 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B)
         {
             for (int j = 0; j < A -> columns; j++)
             {
-                if(A -> matrix[i][j] != B -> matrix[i][j] || !s21_compare_digits(A -> matrix[i][j], B -> matrix[i][j]))
+                if(!s21_compare_digits(A -> matrix[i][j], B -> matrix[i][j]))
                 {
                     flag_fail = FAILURE;
                 }
@@ -146,7 +146,11 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result)
         {
             for (int j = 0; j < A -> columns; j++)
             {
-                result -> matrix[i][j] = A -> matrix[i][j] * number;      // 0
+                if(A -> matrix[i][j] != 0.0 && number != 0.0)
+                {
+                    result -> matrix[i][j] = A -> matrix[i][j] * number;
+                }
+                      // ? -0.0000000
             }
         }
     }
@@ -205,35 +209,36 @@ int s21_transpose(matrix_t *A, matrix_t *result)
 
 int s21_calc_complements(matrix_t *A, matrix_t *result)
 {
-        int flag_fail = 0;
-        double result_determinant = 0;
+    int flag_fail = 0;
+    double result_determinant = 0;
 
-        if(s21_check_null_matrix(A) || s21_incorrect_matrix(A))        flag_fail = 1;
+    if(s21_check_null_matrix(A) || s21_incorrect_matrix(A))        flag_fail = 1;
         
-        else if(!s21_square_matrix(A) || A -> rows == 1)               flag_fail = 2;
+    else if(!s21_square_matrix(A) || A -> rows == 1)               flag_fail = 2;
         
-        else
+    else
+    {
+        matrix_t minor = {0};
+
+        s21_create_matrix(A -> rows, A -> columns ,result);
+
+        for (int i = 0; i < A -> rows; i++)
         {
-            matrix_t minor = {0};
-
-            s21_create_matrix(A -> rows, A -> columns ,result);
-
-            for (int i = 0; i < A -> rows; i++)
+            for (int j = 0; j < A -> rows; j++)
             {
-                for (int j = 0; j < A -> rows; j++)
+                double alg_add = 1.0f;
+                s21_new_matrix_for_minor(A, &minor, A -> rows - 1, i, j);
+                if((i + j) % 2 == 1)
                 {
-                    double alg_add = 1.0f;
-                    s21_new_matrix_for_minor(A, &minor, A -> rows - 1, i, j);
-                    if((i + j) % 2 == 1)
-                    {
-                        alg_add = -1.0f;
-                    }
+                    alg_add = -1.0f;
+                }
                     
-                    s21_determinant(&minor, &result_determinant);     
+                s21_determinant(&minor, &result_determinant);     
 
-                    result -> matrix[i][j] = alg_add * result_determinant;              /// ? 0
+                if(result_determinant == 0.0f) alg_add = 1;
+                result -> matrix[i][j] = alg_add * result_determinant;              /// ? -0.0000
 
-                    s21_remove_matrix(&minor);
+                s21_remove_matrix(&minor);
                 }
             }
         }
@@ -244,17 +249,17 @@ int s21_calc_complements(matrix_t *A, matrix_t *result)
 
 int s21_determinant(matrix_t *A, double *result)
 {
-        int flag_fail = 1;
+    int flag_fail = 0;
         
-        if(s21_check_null_matrix(A) || s21_incorrect_matrix(A) || !result)  flag_fail = 1;
+    if (s21_check_null_matrix(A) || s21_incorrect_matrix(A))  flag_fail = 1;
         
-        else if (!s21_square_matrix(A))                          flag_fail = 2;
+    else if (!s21_square_matrix(A))                           flag_fail = 2;
         
-        else
-        {
-            *result = s21_determinant_execution(A);
-        }
-        return flag_fail;
+    else
+    {
+        *result = s21_determinant_execution(A);
+    }
+    return flag_fail;
 }
 
 
@@ -262,14 +267,10 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result)
 {
     int flag_fail = 0;
         
-    if(s21_check_null_matrix(A) || !s21_incorrect_matrix(A))                                flag_fail = 1;
+    if(s21_check_null_matrix(A) || s21_incorrect_matrix(A))                                 flag_fail = 1;
         
     else if(!s21_square_matrix(A) || (A -> rows == 1 && A -> matrix[0][0] == 0.0f))         flag_fail = 2;
-    
-    // else if(A -> rows == 1 && A -> matrix[0][0] != 0.0f)
-    // {
-    //     result -> matrix[0][0] = (1.0 / A -> matrix[0][0]);
-    // }
+
     else
     {
         double determinant = s21_determinant_execution(A);
@@ -283,18 +284,18 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result)
             matrix_t alg_matrix = {0};
                 
             s21_create_matrix(A -> rows, A -> rows, &alg_matrix);
+            //result -> matrix[0][0] = 0;
             s21_calc_complements(A, &alg_matrix);
                 
             matrix_t alg_matrix_transpose = {0};
             s21_create_matrix(A -> rows, A -> rows, &alg_matrix_transpose);
             s21_transpose(&alg_matrix, &alg_matrix_transpose);
-
+            
             s21_mult_number(&alg_matrix_transpose, 1.0f / determinant, result);
 
             s21_remove_matrix(&alg_matrix);
             s21_remove_matrix(&alg_matrix_transpose);
         }
     }
-
     return flag_fail;
 }
