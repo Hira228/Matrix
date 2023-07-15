@@ -38,4 +38,4 @@ build_file:
 	mkdir Build
 
 $(CLEAN) :
-	rm -rf $(TARGET) *.a *.o $(TESTS).*o *.out app Build *.info html_report
+	rm -rf ${TARGET} *.a *.o $(TESTS).*o *.out app Build *.info html_report
