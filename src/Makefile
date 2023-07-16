@@ -9,7 +9,8 @@ SRCS_TEST = $(wildcard $(TESTS)*.c)
 UNAME := $(shell uname)
 TARGET = test
 GCOV = gcov_report
-GCOV_FLAGS = -fprofile-arcs -ftest-coverage -lgcov 
+GCOV_FLAGS = -fprofile-arcs -ftest-coverage -lgcov
+LIBRARY = s21_matrix.a 
 
 ifeq ($(UNAME), Linux)
  TEST_FLAGS += -lcheck -lsubunit -lrt -lpthread -lm
@@ -23,8 +24,13 @@ endif
 ${TESTS}%.o: ${TESTS}%.c
 	${CC} -c ${FLAGS} $@ $< 
 
-all: $(CLEAN) ${OBJS} ${TEST_OBJS} ${GCOV}
-	${CC} ${FLAGS} -o ${TARGET} ${OBJS} ${TEST_OBJS} ${TEST_FLAGS}
+all: $(CLEAN) $(LIBRARY) ${SRCS} ${SRCS_TEST} ${GCOV}
+	${CC} ${FLAGS} -o ${TARGET} ${SRCS} ${SRCS_TEST} ${TEST_FLAGS}
+
+$(LIBRARY) : $(SRCS)
+	$(CC) $(FLAGS) -c $(SRCS) $(TEST_FLAGS)
+	ar rc $(LIBRARY) *.o
+	ranlib $(LIBRARY)
 
 ${GCOV}: build_file
 	$(CC) $(FLAGS) $(GCOV_FLAGS) $(SRCS_TEST) $(SRCS) $(TEST_FLAGS) -o Build/${GCOV} 
