@@ -191,7 +191,7 @@ Suite *suite_inverse_matrix(void) {
   tcase_add_test(tc, test_not_sqare);
   tcase_add_test(tc, test_zero_det);
   tcase_add_test(tc, test_incorrect);
-  //tcase_add_test(tc, test_one_by_one);
+  // tcase_add_test(tc, test_one_by_one);
 
   suite_add_tcase(s, tc);
   return s;

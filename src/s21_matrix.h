@@ -8,13 +8,12 @@
 #define SUCCESS 1
 #define FAILURE 0
 
-enum {OK = 0, INCORRECT_MATRIX = 1, CALC_ERROR = 2, MALLOC_FAILED = 3};
+enum { OK = 0, INCORRECT_MATRIX = 1, CALC_ERROR = 2, MALLOC_FAILED = 3 };
 
-typedef struct matrix_struct
-{
-    double **matrix;
-    int rows;
-    int columns;
+typedef struct matrix_struct {
+  double **matrix;
+  int rows;
+  int columns;
 } matrix_t;
 
 int s21_create_matrix(int rows, int columns, matrix_t *result);
@@ -29,11 +28,12 @@ int s21_calc_complements(matrix_t *A, matrix_t *result);
 int s21_check_null_matrix(matrix_t *A);
 int s21_size_comparison(matrix_t *A, matrix_t *B);
 int s21_compare_digits(double a, double b);
-void s21_new_matrix_for_minor(matrix_t *A, matrix_t *minor, int minor_size, int crossed_out_rows, int crossed_out_column);
+void s21_new_matrix_for_minor(matrix_t *A, matrix_t *minor, int minor_size,
+                              int crossed_out_rows, int crossed_out_column);
 int s21_square_matrix(matrix_t *A);
 int s21_determinant(matrix_t *A, double *result);
 int s21_inverse_matrix(matrix_t *A, matrix_t *result);
-void s21_set_null_matrix(matrix_t* result);
+void s21_set_null_matrix(matrix_t *result);
 double s21_determinant_execution(matrix_t *A);
 int s21_incorrect_matrix(matrix_t *A);
 #endif

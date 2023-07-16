@@ -1,6 +1,5 @@
 CC = gcc 
-FLAGS =  -Wall -Werror -Wextra# -fsanitize=address -g
-LIBRARY = s21_matrix.a
+FLAGS =  -Wall -Werror -Wextra -g# -fsanitize=address -g
 CLEAN = clean
 TESTS = TEST/
 SRCS = $(wildcard *.c)
@@ -38,4 +37,4 @@ build_file:
 	mkdir Build
 
 $(CLEAN) :
-	rm -rf ${TARGET} *.a *.o $(TESTS).*o *.out app Build *.info html_report
+	rm -rf ${TARGET} *.a *.o $(TESTS).*o *.out app Build *.info html_report TEST/*.o
