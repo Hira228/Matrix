@@ -1,5 +1,5 @@
 CC = gcc 
-FLAGS =  -Wall -Werror -Wextra -g# -fsanitize=address -g
+FLAGS =  -Wall -Werror -Wextra# -fsanitize=address -g
 CLEAN = clean
 TESTS = TEST/
 SRCS = $(wildcard *.c)
