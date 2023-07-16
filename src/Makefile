@@ -1,5 +1,5 @@
 CC = gcc 
-FLAGS =  -Wall -Werror -Wextra# -fsanitize=address -g
+FLAGS =  -Wall -Werror -Wextra -std=c11# -fsanitize=address -g
 CLEAN = clean
 TESTS = TEST/
 SRCS = $(wildcard *.c)
@@ -24,7 +24,9 @@ endif
 ${TESTS}%.o: ${TESTS}%.c
 	${CC} -c ${FLAGS} $@ $< 
 
-all: $(CLEAN) $(LIBRARY) ${SRCS} ${SRCS_TEST} ${GCOV}
+all: ${CLEAN} ${LIBRARY} ${TARGET} ${GCOV}
+
+${TARGET} : $(SRCS) ${SRCS_TEST}
 	${CC} ${FLAGS} -o ${TARGET} ${SRCS} ${SRCS_TEST} ${TEST_FLAGS}
 
 $(LIBRARY) : $(SRCS)
