@@ -31,8 +31,8 @@ int s21_compare_digits(double a, double b) {
   char digit_a[1000] = {0};
   char digit_b[1000] = {0};
 
-  sprintf(digit_a, "%.6f", a);
-  sprintf(digit_b, "%.6f", b);
+  sprintf(digit_a, "%.7f", a);
+  sprintf(digit_b, "%.7f", b);
 
   if (strcmp(digit_a, digit_b) == 0) {
     flag_fail = 1;
